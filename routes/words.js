@@ -11,19 +11,9 @@ router.get('/', async (req, res) => {
   }
 })
 
-router.get('/:words', async (req, res) => {
-  try {
-    //let input_word = (req.params.word).toLowerCase();
-    res.send(input_word)
-
-  } catch (err) {
-    res.status(500).json({message: err.message})
-  }  
-})
-
 router.post('/', async (req, res) => {
-
   let inputOne = req.body.sampleOne;
+  inputOne = inputOne.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"")
   let sampleOneWordsArray = inputOne.split(' ')
   let sampleOneObject = {}
   for (let i of sampleOneWordsArray) {
@@ -35,6 +25,7 @@ router.post('/', async (req, res) => {
   }
   
   let inputTwo = req.body.sampleTwo;
+  inputTwo = inputTwo.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"")
   let sampleTwoWordsArray = inputTwo.split(' ')
   let sampleTwoObject = {}
   for (let i of sampleTwoWordsArray) {
@@ -45,6 +36,8 @@ router.post('/', async (req, res) => {
     }
   }
 
+  let countOfSameWords = 0;
+  let numberOfMatchingWords = 0;
 
   const hashmapsEqual = (sampleOneObject, sampleTwoObject) => {
     const keys1 = Object.keys(sampleOneObject) 
@@ -79,24 +72,24 @@ router.post('/', async (req, res) => {
 
     // these are all the matches in the values (the counts of the words)
     console.log('this is the number of values matched ' + valuesMatchCount)
-
     console.log('this is the number of keys matched ' + keysMatchCount)
 
+    countOfSameWords = keysMatchCount/keys1.length
+    countOfSameWords = (countOfSameWords*100).toFixed(1) + "%"
+    console.log('Percentage of matching words: word only ' + countOfSameWords)
 
+    numberOfMatchingWords = valuesMatchCount/values1.length
+    console.log('Percentage of matches words: word count ' + numberOfMatchingWords)
   }
 
+  hashmapsEqual(sampleOneObject, sampleTwoObject)
 
   try {
-    //res.status(201).json(input)
-  console.log(hashmapsEqual(sampleOneObject, sampleTwoObject))
+  // res.status(201).json(input)
+  // console.log(hashmapsEqual(sampleOneObject, sampleTwoObject))
 
+    res.status(201).json(`These documents have a ${countOfSameWords} similarity.`)
     
-    
-    
-
-
-
-    res.send(input)
   } catch (err) {
     res.status(500).json({message: err.message})
   }  
