@@ -1,7 +1,5 @@
-const e = require('express')
 const express = require('express')
 const router = express.Router()
-const words_list = require('../_files/words.js')
 
 router.get('/', async (req, res) => {
   try {
@@ -12,6 +10,7 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
+
   let inputOne = req.body.sampleOne;
   inputOne = inputOne.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"")
   let sampleOneWordsArray = inputOne.split(' ')
@@ -44,18 +43,17 @@ router.post('/', async (req, res) => {
     const values1 = Object.values(sampleOneObject)
 
     const keys2 = Object.keys(sampleTwoObject)
+    console.log('this is keys2 ' + keys2)
     const values2 = Object.values(sampleTwoObject)
+
     let valuesMatchCount = 0
     let keysMatchCount = 0
 
     // compare some count/keys1.length
     //return(keys1.length, keys2.length)
-
-
     // sort through all of keys and values and compare them to 
 
-
-    for (let i in sampleOneObject) {
+    for (let i in sampleOneObject) { // 
       //console.log(i) //key
       //console.log(sampleOneObject[i]) //value
 
@@ -63,37 +61,34 @@ router.post('/', async (req, res) => {
         //console.log(i) //i in in obj 1, this is key
         //console.log(sampleOneObject[i])
         //console.log(sampleTwoObject[i]) //this is value
+        console.log('this is i from line 63 ' + i)
         keysMatchCount++
         if (sampleOneObject[i] == sampleTwoObject[i]) {
+          console.log('this is sampleOneObject[i] from line 66 ' + sampleOneObject[i] )
           valuesMatchCount++
         }
       }
     }
 
-    // these are all the matches in the values (the counts of the words)
-    console.log('this is the number of values matched ' + valuesMatchCount)
-    console.log('this is the number of keys matched ' + keysMatchCount)
+    // These are all the matches in the values (the counts of the words)
+    console.log('The number of keys matched is ' + keysMatchCount)
+    console.log('The number of values matched is ' + valuesMatchCount)
+   
 
-    countOfSameWords = keysMatchCount/keys1.length
-    countOfSameWords = (countOfSameWords*100).toFixed(1) + "%"
-    console.log('Percentage of matching words: word only ' + countOfSameWords)
+    countOfSameWords = keysMatchCount/keys1.length.toFixed(2)
+    console.log('Percentage of matching words (without checking the number of repeated word count) ' + countOfSameWords)
 
-    numberOfMatchingWords = valuesMatchCount/values1.length
-    console.log('Percentage of matches words: word count ' + numberOfMatchingWords)
+    numberOfMatchingWords = (valuesMatchCount/values1.length).toFixed(2)
+    console.log('Percentage of matching words while checking to to see if the count of matched words is the same ' + numberOfMatchingWords)
   }
 
   hashmapsEqual(sampleOneObject, sampleTwoObject)
 
   try {
-  // res.status(201).json(input)
-  // console.log(hashmapsEqual(sampleOneObject, sampleTwoObject))
-
-    res.status(201).json(`These documents have a ${countOfSameWords} similarity.`)
-    
+    res.status(200).json(`These documents have a ${numberOfMatchingWords} score of similarity.`)
   } catch (err) {
     res.status(500).json({message: err.message})
   }  
 })
-
 
 module.exports = router
