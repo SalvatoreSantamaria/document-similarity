@@ -13,4 +13,4 @@
 ## To easily send a post request with the REST Client Extention:
 * Download REST Client extention for VS Code (https://github.com/Huachao/vscode-restclient) 
 
-* Navigate to *Document Similarity/routes/route.rest* and selecte "Send Request" 
+* Navigate to *Document Similarity/routes/route.rest* and select "Send Request" 
