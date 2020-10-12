@@ -1,14 +1,6 @@
 const express = require('express')
 const router = express.Router()
 
-router.get('/', async (req, res) => {
-  try {
-    res.send('Get /')
-  } catch (err) {
-    res.status(500).json({message: err.message})
-  }
-})
-
 router.post('/', async (req, res) => {
 
   let inputOne = req.body.sampleOne;
@@ -43,43 +35,31 @@ router.post('/', async (req, res) => {
     const values1 = Object.values(sampleOneObject)
 
     const keys2 = Object.keys(sampleTwoObject)
-    console.log('this is keys2 ' + keys2)
     const values2 = Object.values(sampleTwoObject)
 
     let valuesMatchCount = 0
     let keysMatchCount = 0
 
-    // compare some count/keys1.length
-    //return(keys1.length, keys2.length)
-    // sort through all of keys and values and compare them to 
-
-    for (let i in sampleOneObject) { // 
-      //console.log(i) //key
-      //console.log(sampleOneObject[i]) //value
-
-      if (keys2.includes(i)) { // if obj2 has the same key as obj1
-        //console.log(i) //i in in obj 1, this is key
-        //console.log(sampleOneObject[i])
-        //console.log(sampleTwoObject[i]) //this is value
-        console.log('this is i from line 63 ' + i)
+    for (let i in sampleOneObject) {
+      // Check to see if obj1 has the same key as obj2
+      if (keys2.includes(i)) { 
         keysMatchCount++
+        // Check to see if obj1 has same count of values as obj2
         if (sampleOneObject[i] == sampleTwoObject[i]) {
-          console.log('this is sampleOneObject[i] from line 66 ' + sampleOneObject[i] )
+ 
           valuesMatchCount++
         }
       }
     }
 
-    // These are all the matches in the values (the counts of the words)
     console.log('The number of keys matched is ' + keysMatchCount)
-    console.log('The number of values matched is ' + valuesMatchCount)
+    console.log('The number of values exactly matched is ' + valuesMatchCount)
    
-
-    countOfSameWords = keysMatchCount/keys1.length.toFixed(2)
+    countOfSameWords = (keysMatchCount/keys1.length).toFixed(2)
     console.log('Percentage of matching words (without checking the number of repeated word count) ' + countOfSameWords)
 
     numberOfMatchingWords = (valuesMatchCount/values1.length).toFixed(2)
-    console.log('Percentage of matching words while checking to to see if the count of matched words is the same ' + numberOfMatchingWords)
+    console.log('Percentage of matching words while checking to see if the count of matched words is the same ' + numberOfMatchingWords)
   }
 
   hashmapsEqual(sampleOneObject, sampleTwoObject)
